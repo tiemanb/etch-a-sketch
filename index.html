@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p id="p">hello</p>
+    <script>
+       
+        let container = createContainer();
+        let button = createButton();
+        document.body.appendChild(button);
+        let canvas = createGrid(16);
+        drawGrid();
+        document.body.appendChild(container);
+
+        function drawGrid(){
+            for(let i= 0; i<canvas.length; i++){
+                for(let j = 0; j<canvas[i].length; j++){
+                    //console.log("s ");
+                    container.appendChild(canvas[i][j].square);//canvas[i][j].square
+                }
+            }  
+        }
+
+        function createContainer(){
+            let container = document.createElement('div');
+            container.style.display = 'flex';
+            container.style.flexWrap = 'wrap';
+            container.style.width = "500px";
+            container.style.height = "500px";
+            container.style.border = "5px solid black";
+            container.style.marginLeft = "auto";
+            container.style.marginRight= "auto";
+            return container;
+        }
+
+        function createGrid(x){
+            let grid = new Array(x);
+            for(let i = 0; i<grid.length; i++){
+                    //create a square 
+                    //set its w and h = to containerwidth/x 
+                    //create event listener 
+                    grid[i] = new Array(x);
+            }
+
+            for(let i = 0; i<grid.length; i++){
+                for(let j = 0; j<grid[i].length; j++){
+                    let alpha = 0;
+                    let hue = Math.floor(Math.random() * 360);
+                    let tile = document.createElement('div');
+                    tile.style.width = `${(500/x)}px`;
+                    tile.style.height = `${(500/x)}px`;
+                    tile.style.flexShrink='0';
+                    tile.addEventListener('mouseover',(e)=>{
+                        if(alpha<1) alpha +=0.1;
+                        tile.style.backgroundColor=`hsla(${hue}, 100%, 30%, ${alpha})`;
+                    });
+                    grid[i][j] = {
+                        square:tile,
+                    };
+                }
+            }
+
+            return grid;
+        }
+
+        function createButton(){
+            let button = document.createElement('button');
+            button.textContent= 'reset';
+            button.addEventListener('click',e=>{
+                let userNum = Number(prompt("enter a number from 1-100 to resize both dimensions"));
+                destroyGrid();
+                canvas = createGrid(userNum);
+                //colors = createColors(userNum);
+                drawGrid();
+            });
+
+            return button;
+        }
+
+        function destroyGrid(){
+            for(let i = 0; i<canvas.length; i++){
+                for(let j = 0; j<canvas[i].length; j++){
+                    canvas[i][j].square.remove();
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>
